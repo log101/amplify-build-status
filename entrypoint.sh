@@ -44,12 +44,21 @@ if [[ $TIMEOUT -lt 0 ]]; then
 fi
 
 get_status () {
-    local status;
-    status=$(aws amplify list-jobs --app-id "$1" --branch-name "$2" | jq -r ".jobSummaries[] | select(.commitId == \"$3\") | .status")
+    local status
+
+    if [ "$COMMIT_ID" = "HEAD" ]; then
+        # Get the first job summary where commitId is 'HEAD'
+        status=$(aws amplify list-jobs --app-id "$1" --branch-name "$2" | jq -r '.jobSummaries | first | .status')
+    else
+        # Get the first job summary for the specified commit ID
+        status=$(aws amplify list-jobs --app-id "$1" --branch-name "$2" | jq -r --arg commit_id "$COMMIT_ID" '.jobSummaries[] | select(.commitId == $commit_id) | .status')
+    fi
+
     exit_status=$?
-    # it seems like sometimes status ends up with a new line in it?
-    # strip it out
-    status=$(echo $status | tr '\n' ' ')
+
+    # Remove any potential new lines from the status
+    status=$(echo "$status" | tr -d '\n')
+
     echo "$status"
     return $exit_status
 }
