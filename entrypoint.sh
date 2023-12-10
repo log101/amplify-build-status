@@ -67,7 +67,7 @@ no_fail_check () {
 }
 
 JOB_ID=$(aws amplify list-jobs --app-id "$APP_ID" --branch-name "$BRANCH_NAME" | jq -r '.jobSummaries | first | .jobId')
-JOB_LOG_URL=$(aws amplify get-job --job-id "$JOB_ID" --app-id "$1" --branch-name "$BRANCH_NAME" | jq -r '.job .steps[0] .logUrl')
+JOB_LOG_URL=$(aws amplify get-job --job-id "$JOB_ID" --app-id "$APP_ID" --branch-name "$BRANCH_NAME" | jq -r '.job .steps[0] .logUrl')
 
 STATUS=$(get_status "$APP_ID" "$BRANCH_NAME" "$COMMIT_ID")
 
@@ -78,7 +78,7 @@ fi
 
 if [[ $STATUS == "SUCCEED" ]]; then
     echo "Build Succeeded!"
-    echo "logs=$JOB_LOG_URL" >> $GITHUB_OUTPUT
+    wget -P "/github/workspace" $JOB_LOG_URL
     echo "status=$STATUS" >> $GITHUB_OUTPUT
     exit 0
 elif [[ $STATUS == "FAILED" ]]; then
@@ -137,6 +137,6 @@ elif [[ "$WAIT" == "true" ]]; then
         count=$(( $count + 30 ))
     done
     echo "Build Succeeded!"
-    echo "logs=$JOB_LOG_URL" >> $GITHUB_OUTPUT
+    wget -P "/github/workspace" $JOB_LOG_URL
     echo "status=$STATUS" >> $GITHUB_OUTPUT
 fi
