@@ -136,7 +136,6 @@ elif [[ "$WAIT" == "true" ]]; then
         fi
         count=$(( $count + 30 ))
     done
-    job_logs=$(get_job_logs "$APP_ID" "$BRANCH_NAME" "$COMMIT_ID")
     echo "Build Succeeded!"
     echo "logs=$JOB_LOG_URL" >> $GITHUB_OUTPUT
     echo "status=$STATUS" >> $GITHUB_OUTPUT
