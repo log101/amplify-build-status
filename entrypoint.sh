@@ -61,7 +61,7 @@ get_job_logs () {
     local job_id
 
     job_id=$(aws amplify list-jobs --app-id "$1" --branch-name "$2" | jq -r '.jobSummaries | first | .jobId')
-    jobLogUrl=$(aws amplify get-job --job-id "$job_id" --app-id d23ww4wqijpm2l --branch-name main | jq -r '.job .steps[0] .logUrl')
+    jobLogUrl=$(aws amplify get-job --job-id "$job_id" --app-id "$1" --branch-name "$2" | jq -r '.job .steps[0] .logUrl')
 
     return $jobLogUrl
 }
