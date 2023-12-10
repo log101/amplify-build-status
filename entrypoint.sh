@@ -78,8 +78,7 @@ fi
 
 if [[ $STATUS == "SUCCEED" ]]; then
     echo "Build Succeeded!"
-    wget -P "/github/workspace" $JOB_LOG_URL
-    echo "status=$STATUS" >> $GITHUB_OUTPUT
+    wget -P /github/workspace -O log.txt $JOB_LOG_URL
     exit 0
 elif [[ $STATUS == "FAILED" ]]; then
     echo "Build Failed!"
@@ -137,6 +136,5 @@ elif [[ "$WAIT" == "true" ]]; then
         count=$(( $count + 30 ))
     done
     echo "Build Succeeded!"
-    wget -P "/github/workspace" $JOB_LOG_URL
-    echo "status=$STATUS" >> $GITHUB_OUTPUT
+    wget -P /github/workspace -O log.txt $JOB_LOG_URL
 fi
