@@ -46,13 +46,9 @@ fi
 get_status () {
     local status
 
-    if [ "$COMMIT_ID" = "HEAD" ]; then
-        # Get the first job summary where commitId is 'HEAD'
-        status=$(aws amplify list-jobs --app-id "$1" --branch-name "$2" | jq -r '.jobSummaries | first | .status')
-    else
-        # Get the first job summary for the specified commit ID
-        status=$(aws amplify list-jobs --app-id "$1" --branch-name "$2" | jq -r --arg commit_id "$COMMIT_ID" '.jobSummaries[] | select(.commitId == $commit_id) | .status')
-    fi
+    # Get the last job summary
+    status=$(aws amplify list-jobs --app-id "$1" --branch-name "$2" | jq -r '.jobSummaries | first | .status')
+
 
     exit_status=$?
 
