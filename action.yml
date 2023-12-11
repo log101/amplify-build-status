@@ -27,8 +27,6 @@ inputs:
     required: false
     default: false
 outputs:
-  logs:
-    description: 'The logs of the build.'
   status:
     description: 'The result of the build.'
 runs:

@@ -79,15 +79,13 @@ fi
 if [[ $STATUS == "SUCCEED" ]]; then
     echo "Build Succeeded!"
     wget -P /github/workspace -O log.txt $JOB_LOG_URL
-    logs="$(cat /github/workspace/log.txt)"
-    "logs<<EOF"$'\n'"$logs"$'\n'EOF >> $GITHUB_OUTPUT
+    cat /github/workspace/log.txt
     exit 0
 elif [[ $STATUS == "FAILED" ]]; then
     echo "Build Failed!"
     echo "status=$STATUS" >> $GITHUB_OUTPUT
     wget -P /github/workspace -O log.txt $JOB_LOG_URL
-    logs="$(cat /github/workspace/log.txt)"
-    "logs<<EOF"$'\n'"$logs"$'\n'EOF >> $GITHUB_OUTPUT
+    cat /github/workspace/log.txt
     no_fail_check
 fi
 
@@ -135,8 +133,7 @@ elif [[ "$WAIT" == "true" ]]; then
             echo "Build Failed!"
             echo "status=$STATUS" >> $GITHUB_OUTPUT
             wget -P /github/workspace -O log.txt $JOB_LOG_URL
-            logs="$(cat /github/workspace/log.txt)"
-            "logs<<EOF"$'\n'"$logs"$'\n'EOF >> $GITHUB_OUTPUT
+            cat /github/workspace/log.txt
             no_fail_check
         else
             echo "Build in progress... Status: $STATUS"
@@ -145,6 +142,5 @@ elif [[ "$WAIT" == "true" ]]; then
     done
     echo "Build Succeeded!"
     wget -P /github/workspace -O log.txt $JOB_LOG_URL
-    logs="$(cat /github/workspace/log.txt)"
-    "logs<<EOF"$'\n'"$logs"$'\n'EOF >> $GITHUB_OUTPUT
+    cat /github/workspace/log.txt
 fi
